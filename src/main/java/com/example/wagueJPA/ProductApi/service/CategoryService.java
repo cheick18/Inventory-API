@@ -30,8 +30,8 @@ public class CategoryService {
         Category category= new Category();
         category.setName(categoryDto.getName());
 
-        Category savedCategorie = categoryRepository.save(category);
-     return convertToDto(savedCategorie);
+        Category savedCategory = categoryRepository.save(category);
+     return convertToDto(savedCategory);
     }
     public CategoryResponseDTO getCategoryById(Long id) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new CategoryNotFoundException(id));
@@ -54,5 +54,13 @@ public class CategoryService {
         return categries.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
+    }
+    public Category savedCategory(CategoryDTO categoryDTO){
+        Category category= new Category();
+        category.setName(categoryDTO.getName());
+
+        return categoryRepository.save(category);
+
+
     }
 }

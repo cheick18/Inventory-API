@@ -2,63 +2,80 @@ package com.example.wagueJPA.configuration;
 
 import com.example.wagueJPA.ProductApi.dto.CategoryDTO;
 import com.example.wagueJPA.ProductApi.dto.ProductDTO;
+import com.example.wagueJPA.ProductApi.dto.UserDTO;
 import com.example.wagueJPA.ProductApi.model.Category;
+import com.example.wagueJPA.ProductApi.model.Product;
+import com.example.wagueJPA.ProductApi.model.Users;
 import com.example.wagueJPA.ProductApi.service.CategoryService;
 import com.example.wagueJPA.ProductApi.service.ProductService;
+import com.example.wagueJPA.ProductApi.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @Configuration
 public class TestApplication {
     private static final Logger log = LoggerFactory.getLogger(TestApplication.class);
-    public Category getRandomCategory(CategoryDTO[] categories) {
-        Random random = new Random();
-         CategoryDTO categoryDTO=  categories[random.nextInt(categories.length)];
-         Category category= new Category();
-         category.setName(categoryDTO.getName());
-         category.setId(categoryDTO.getId());
-         return category;
-    }
+    List<Category> categoryList= new ArrayList<>();
+
+   public Long getRandomCategory() {
+       Random random = new Random();
+       int index=random.nextInt(categoryList.size());
+       return categoryList.get(index).getId();
+   }
+
     @Bean
-    CommandLineRunner initDatabase(ProductService productService, CategoryService categoryService){
+    CommandLineRunner initDatabase(ProductService productService, CategoryService categoryService, UserService userService){
         return args -> {
 
+            CategoryDTO[] savedcategories[];
             CategoryDTO[] categories = {
-                    new CategoryDTO( 1L,"Electronique"),
-                    new CategoryDTO(2L,"Vêtements"),
-                    new CategoryDTO(3L,"Accessoires"),
-                    new CategoryDTO(4L,"Maison"),
-                    new CategoryDTO(5L,"Sport"),
-                    new CategoryDTO(6L,"Jouets"),
-                    new CategoryDTO(7L,"Alimentation"),
+                    new CategoryDTO( "Electronique"),
+                    new CategoryDTO("Vêtements"),
+                    new CategoryDTO("Accessoires"),
+                    new CategoryDTO("Maison"),
+                    new CategoryDTO("Sport"),
+                    new CategoryDTO("Jouets"),
+                    new CategoryDTO("Alimentation"),
 
             };
 
             for ( CategoryDTO categoryDTO : categories) {
-                log.info("Preloading " + categoryService.createCategory(categoryDTO));
+                categoryList.add(categoryService.savedCategory(categoryDTO));
+                // log.info("Preloading " + categoryService.createCategory(categoryDTO));
             }
 
             ProductDTO[] products = {
-                    new ProductDTO(1L, "T-shirt", 19.99, 50, getRandomCategory(categories)),
-                    new ProductDTO(2L, "Jeans", 49.99, 30, getRandomCategory(categories)),
-                    new ProductDTO(3L, "Sneakers", 69.99, 20, getRandomCategory(categories)),
-                    new ProductDTO(4L, "Jacket", 99.99, 15, getRandomCategory(categories)),
-                    new ProductDTO(5L, "Watch", 199.99, 10, getRandomCategory(categories)),
-                    new ProductDTO(6L, "Laptop", 899.99, 5, getRandomCategory(categories)),
-                    new ProductDTO(7L, "Phone", 499.99, 25, getRandomCategory(categories)),
-                    new ProductDTO(8L, "Headphones", 79.99, 40, getRandomCategory(categories)),
-                    new ProductDTO(9L, "Backpack", 39.99, 60, getRandomCategory(categories)),
-                    new ProductDTO(10L, "Sunglasses", 29.99, 100, getRandomCategory(categories))
+
+                    new ProductDTO("Jeans", 49.99, 30, getRandomCategory()),
+                    new ProductDTO("Sneakers", 69.99, 20, getRandomCategory()),
+                    new ProductDTO("Jacket", 99.99, 15, getRandomCategory()),
+                    new ProductDTO("Watch", 199.99, 10, getRandomCategory()),
+                    new ProductDTO("Laptop", 899.99, 5, getRandomCategory()),
+                    new ProductDTO("Phone", 499.99, 25, getRandomCategory()),
+                    new ProductDTO("Headphones", 79.99, 40, getRandomCategory()),
+                    new ProductDTO("Backpack", 39.99, 60, getRandomCategory()),
+                    new ProductDTO( "Sunglasses", 29.99, 100, getRandomCategory())
             };
+
 
             for (ProductDTO productDTO : products) {
                 log.info("Preloading " + productService.createProduct(productDTO));
             }
+            UserDTO users[]={
+                    new UserDTO("wague","w@11"),
+                    new UserDTO("cheick","c@11")
+     };
+            for (UserDTO userDTO : users) {
+                log.info("Preloading " + userService.createUser(userDTO));
+            }
+
 
         };
 

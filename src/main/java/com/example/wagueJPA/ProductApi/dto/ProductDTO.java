@@ -7,9 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 public class ProductDTO {
-    @NotNull(message = "Reference can't be null")
-    @Positive(message = "Reference should be positif")
-    private Long reference;
     @NotNull(message = "Name can't be nul")
     private String name;
     @NotNull(message = "Price can't be null")
@@ -19,58 +16,47 @@ public class ProductDTO {
     @Min(value = 0, message = "Quantity shoud be positve or null")
     private int quantity;
     @NotNull(message = "Product categorie is reuired")
-    private Category categorie;
+    private Long categorieId;
 
-    public ProductDTO(@NotNull(message = "Reference can't be null") Long reference, @NotNull(message = "Name can't be nul") String name, @NotNull(message = "Price can't be null") double price, int quantity, @NotNull(message = "Product categorie is reuired") Category categorie) {
-        this.reference = reference;
-        this.name = name;
-        this.price = price;
-        this.quantity = quantity;
-        this.categorie = categorie;
-    }
-
-    public Long getReference() {
-        return reference;
+    public ProductDTO() {
     }
 
     public String getName() {
         return name;
     }
 
-    public double getPrice() {
-        return price;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public ProductDTO(Long reference, String name, double price, int quantity) {
-        this.reference = reference;
-        this.name = name;
-        this.price = price;
-        this.quantity = quantity;
-
-    }
-
-    public Category getCategorie() {
-        return categorie;
-    }
-
-    public void setReference(Long reference) {
-        this.reference = reference;
-    }
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    public double getPrice() {
+        return price;
     }
 
     public void setPrice(double price) {
         this.price = price;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
+    public Long getCategorieId() {
+        return categorieId;
+    }
+
+    public void setCategorieId(Long categorieId) {
+        this.categorieId = categorieId;
+    }
+
+    public ProductDTO(@NotNull(message = "Name can't be nul") String name, @NotNull(message = "Price can't be null") double price, int quantity, @NotNull(message = "Product categorie is reuired") Long categorieId) {
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.categorieId = categorieId;
+    }
 }

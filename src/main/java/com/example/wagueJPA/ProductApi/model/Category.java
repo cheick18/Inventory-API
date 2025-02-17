@@ -1,5 +1,6 @@
 package com.example.wagueJPA.ProductApi.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -9,16 +10,12 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @OneToMany(mappedBy = "categorie")
+
+    @OneToMany(mappedBy = "categorie", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Product> produits;
 
     public Category() {
-    }
-
-    public Category(Long id, String name, List<Product> produits) {
-        this.id = id;
-        this.name = name;
-        this.produits = produits;
     }
 
     public Long getId() {

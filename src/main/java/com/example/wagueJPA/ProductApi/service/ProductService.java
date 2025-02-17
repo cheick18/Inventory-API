@@ -29,7 +29,7 @@ public class ProductService {
     //Create product
     @Transactional
     public ProductResponseDTO createProduct( ProductDTO productDTO) {
-        Category category =categoryRepository.findById(productDTO.getCategorie().getId())
+        Category category =categoryRepository.findById(productDTO.getCategorieId())
                 .orElseThrow(() -> new RuntimeException("Catégorie not found"));
 
         Product product = new Product();

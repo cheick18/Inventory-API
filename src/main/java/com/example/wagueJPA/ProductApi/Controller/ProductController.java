@@ -19,12 +19,12 @@ public class ProductController {
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
-    @GetMapping
+    @GetMapping("")
     public ResponseEntity<List<ProductResponseDTO>> getAllProducts() {
 
         return ResponseEntity.ok(productService.getAllProducts());
     }
-    @PostMapping
+    @PostMapping("")
     public ResponseEntity<ProductResponseDTO> createProduct(@Valid @RequestBody ProductDTO productDTO){
         ProductResponseDTO createdProduct = productService.createProduct(productDTO);
         return ResponseEntity.ok(createdProduct);

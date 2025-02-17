@@ -1,6 +1,8 @@
 package com.example.wagueJPA.ProductApi.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -9,8 +11,8 @@ import java.util.Objects;
 @Entity
 public class Product implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long reference;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
     private double price;
 
@@ -27,14 +29,18 @@ public class Product implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "categorie_id")
+    @JsonBackReference
+    @JsonIgnore
     private Category categorie;
 
-    public Long getReference() {
-        return reference;
+    public Product() {
     }
 
-    public void setReference(Long reference) {
-        this.reference = reference;
+    public Product(String name, double price, int quantity, Category categorie) {
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.categorie = categorie;
     }
 
     public String getName() {
@@ -66,16 +72,11 @@ public class Product implements Serializable {
     }
 
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Product product)) return false;
-        return Double.compare(product.price, price) == 0 && quantity == product.quantity && Objects.equals(reference, product.reference) && Objects.equals(name, product.name);
+    public Long getId() {
+        return id;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(reference, name, price, quantity);
+    public void setId(Long id) {
+        this.id = id;
     }
 }
