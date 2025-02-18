@@ -3,19 +3,18 @@ package com.example.wagueJPA.configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -32,7 +31,8 @@ public class SecurityConfig {
                .csrf(AbstractHttpConfigurer::disable)
                .authorizeHttpRequests(authorizeRequests ->
                        authorizeRequests
-                               .requestMatchers(HttpMethod.GET, "/api/categories","/api/categories/{id}", "/api/products","/api/products/{id}").permitAll()
+                               .requestMatchers(HttpMethod.GET, "/api/categories","/api/categories/{id}", "/api/products","/api/products/{id}","/api/auth/registration","/api/auth/user").permitAll()
+                               .requestMatchers(HttpMethod.POST,  "/api/auth/login","/api/auth/registration").permitAll()
                                .requestMatchers(HttpMethod.PUT, "/api/categories", "/api/products").authenticated()
                                .requestMatchers(HttpMethod.DELETE, "/api/categories", "/api/products").authenticated()
                                .anyRequest().authenticated()
@@ -52,6 +52,12 @@ public class SecurityConfig {
        provider.setPasswordEncoder(new BCryptPasswordEncoder(12));
        provider.setUserDetailsService(userDetailsService);
        return provider;
+   }
+
+   @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+
    }
 
 }
